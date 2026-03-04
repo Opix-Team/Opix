@@ -14,6 +14,96 @@ export type Database = {
   }
   public: {
     Tables: {
+      api_keys: {
+        Row: {
+          created_at: string
+          expires_at: string | null
+          id: string
+          is_active: boolean
+          key_hash: string
+          key_prefix: string
+          last_used_at: string | null
+          name: string
+          scopes: string[]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          key_hash: string
+          key_prefix: string
+          last_used_at?: string | null
+          name: string
+          scopes?: string[]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          key_hash?: string
+          key_prefix?: string
+          last_used_at?: string | null
+          name?: string
+          scopes?: string[]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      authorizations: {
+        Row: {
+          app_icon: string | null
+          app_name: string
+          app_url: string | null
+          client_id: string
+          client_secret_hash: string | null
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          last_used_at: string | null
+          redirect_uri: string | null
+          scopes: string[]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          app_icon?: string | null
+          app_name: string
+          app_url?: string | null
+          client_id?: string
+          client_secret_hash?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          last_used_at?: string | null
+          redirect_uri?: string | null
+          scopes?: string[]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          app_icon?: string | null
+          app_name?: string
+          app_url?: string | null
+          client_id?: string
+          client_secret_hash?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          last_used_at?: string | null
+          redirect_uri?: string | null
+          scopes?: string[]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       integration_logs: {
         Row: {
           created_at: string
@@ -188,7 +278,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      generate_api_key: { Args: never; Returns: string }
     }
     Enums: {
       [_ in never]: never
