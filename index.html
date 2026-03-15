@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- TODO: Set the document title to the name of your application -->
-    <title>Opix — Realtime Invite Infrastructure</title>
+    <title>Opix — Invite backend</title>
     <meta name="description" content="Production-ready invite flows, integration management, and realtime event tracking through a single API.">
     <meta name="author" content="Opix" />
 
@@ -12,15 +12,20 @@
     
     <meta property="og:type" content="website" />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/5448187d-8f17-40f9-b7a4-d758f47b2901?Expires=1772469500&amp;GoogleAccessId=go-api-on-aws%40gpt-engineer-390607.iam.gserviceaccount.com&amp;Signature=z%2FkhJ0%2BoMh%2BxjrAqTp0Hf%2FIF9LUdnRCb26a3EBjf8p%2FK866H1Wr7%2FR%2F7h2gOuzMy0FwYZAb%2BQkw%2FqiKb9cPqwvP2fprjcFKPG5MzK8q9CNY2s401oXEm49NvfF023ui5%2B0aKWepXVnYGkLzlt%2BkXVkd4r8mtUNrkTGhd8DEkDABP1jCbAdgbqOlFaH%2FGa%2B2X8olVQYYE4go8d1mIiQNe%2FqGqsDRvTqqHKVcdyMPoBQGv47Nk3RF%2BzDn8AZSaKHAw8mus3zucGPc6Y0Dp5sP%2F3eSWd9xeCQCGzo8i8nOpOiQm19gnWXPPL%2BfzzXe%2F8bDto00VAGMeU4cLAPSTaYxHlw%3D%3D">
+    <meta property="og:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/36f33fa4-6867-4faf-92eb-6c429078a398?Expires=1773599259&amp;GoogleAccessId=go-api-on-aws%40gpt-engineer-390607.iam.gserviceaccount.com&amp;Signature=HmhTxpN43u7zIm3w2I6uGxa0Yr6SQsnrgBm6o4Icen1TmG%2BIkKqrf%2FWF%2BhykF7MfmnYtUKa2WNYScS%2BuW7r%2F62N6HAh8VTGRxBDumXXa80l7r53c5%2BWGBb86fUXCS7Uyzz0kklyvIACSmnwQ75CsN463EF7VMUMlmOHb19duzr3g6XcYZ%2BlskSu1880H%2BnN9MH3dfN%2FWV6S3tg%2Fd1mkktvXl3mKXayNc8s00BaeqlgJpZT%2BMwhr3ANYlH8FiceBhSJsZJvS6HotzbUdnSjeC4YZzKvc1SS55PC4BFEwL1%2B28ZsZo6Jm2Oivv3LBLc5WQZ9TKALAW%2FfLkK9MgAR3n5Q%3D%3D">
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@Lovable" />
-    <meta name="twitter:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/5448187d-8f17-40f9-b7a4-d758f47b2901?Expires=1772469500&amp;GoogleAccessId=go-api-on-aws%40gpt-engineer-390607.iam.gserviceaccount.com&amp;Signature=z%2FkhJ0%2BoMh%2BxjrAqTp0Hf%2FIF9LUdnRCb26a3EBjf8p%2FK866H1Wr7%2FR%2F7h2gOuzMy0FwYZAb%2BQkw%2FqiKb9cPqwvP2fprjcFKPG5MzK8q9CNY2s401oXEm49NvfF023ui5%2B0aKWepXVnYGkLzlt%2BkXVkd4r8mtUNrkTGhd8DEkDABP1jCbAdgbqOlFaH%2FGa%2B2X8olVQYYE4go8d1mIiQNe%2FqGqsDRvTqqHKVcdyMPoBQGv47Nk3RF%2BzDn8AZSaKHAw8mus3zucGPc6Y0Dp5sP%2F3eSWd9xeCQCGzo8i8nOpOiQm19gnWXPPL%2BfzzXe%2F8bDto00VAGMeU4cLAPSTaYxHlw%3D%3D">
-    <meta property="og:title" content="Opix — Realtime Invite Infrastructure">
-  <meta name="twitter:title" content="Opix — Realtime Invite Infrastructure">
+    <meta name="twitter:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/36f33fa4-6867-4faf-92eb-6c429078a398?Expires=1773599259&amp;GoogleAccessId=go-api-on-aws%40gpt-engineer-390607.iam.gserviceaccount.com&amp;Signature=HmhTxpN43u7zIm3w2I6uGxa0Yr6SQsnrgBm6o4Icen1TmG%2BIkKqrf%2FWF%2BhykF7MfmnYtUKa2WNYScS%2BuW7r%2F62N6HAh8VTGRxBDumXXa80l7r53c5%2BWGBb86fUXCS7Uyzz0kklyvIACSmnwQ75CsN463EF7VMUMlmOHb19duzr3g6XcYZ%2BlskSu1880H%2BnN9MH3dfN%2FWV6S3tg%2Fd1mkktvXl3mKXayNc8s00BaeqlgJpZT%2BMwhr3ANYlH8FiceBhSJsZJvS6HotzbUdnSjeC4YZzKvc1SS55PC4BFEwL1%2B28ZsZo6Jm2Oivv3LBLc5WQZ9TKALAW%2FfLkK9MgAR3n5Q%3D%3D">
+    
+  
+  
+  
+  <meta property="og:title" content="Opix — Invite backend">
+  <meta name="twitter:title" content="Opix — Invite backend">
   <meta property="og:description" content="Production-ready invite flows, integration management, and realtime event tracking through a single API.">
   <meta name="twitter:description" content="Production-ready invite flows, integration management, and realtime event tracking through a single API.">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
 </head>
 
   <body>
