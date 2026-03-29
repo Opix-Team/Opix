@@ -12,7 +12,9 @@ const HeroSection = () => {
         {/* Badge */}
         <div className="animate-fade-up inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/20 bg-primary/5 mb-8">
           <Zap className="w-3.5 h-3.5 text-primary" />
-          <span className="text-sm font-medium text-primary">Realtime Invite Infrastructure</span>
+          <span className="text-sm font-medium text-primary">
+            Realtime Invite Infrastructure
+          </span>
         </div>
 
         {/* Headline */}
@@ -24,7 +26,7 @@ const HeroSection = () => {
 
         {/* Subheadline */}
         <p className="animate-fade-up delay-200 mt-6 text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-          Opix gives you production-ready invite flows, integration management, 
+          Opix gives you production-ready invite flows, integration management,
           and realtime event tracking — all through a single, elegant API.
         </p>
 
@@ -39,6 +41,12 @@ const HeroSection = () => {
           </button>
         </div>
 
+        {/* NOTE */}
+        <p className="animate-fade-up delay-400 mt-4 text-sm text-muted-foreground">
+          <strong className="text-foreground">Note:</strong> The API Key is{" "}
+          <span className="font-semibold">not required</span> for client-side usage.
+        </p>
+
         {/* Code preview */}
         <div className="animate-fade-up delay-500 mt-16 max-w-2xl mx-auto">
           <div className="surface-glass rounded-xl overflow-hidden">
@@ -46,17 +54,36 @@ const HeroSection = () => {
               <div className="w-3 h-3 rounded-full bg-destructive/60" />
               <div className="w-3 h-3 rounded-full bg-muted-foreground/40" />
               <div className="w-3 h-3 rounded-full bg-primary/40" />
-              <span className="ml-2 text-xs text-muted-foreground font-mono">invite.create.ts</span>
+              <span className="ml-2 text-xs text-muted-foreground font-mono">
+                invite.create.ts
+              </span>
             </div>
             <pre className="p-5 text-left text-sm font-mono leading-relaxed overflow-x-auto">
               <code>
-                <span className="text-muted-foreground">{"// Create an invite with realtime tracking"}</span>{"\n"}
-                <span className="text-primary">const</span>{" invite = "}<span className="text-primary">await</span>{" opix.invites."}<span className="text-cyan-300">create</span>{"({"}{"\n"}
-                {"  type: "}<span className="text-green-400">{'"referral"'}</span>{","}{"\n"}
-                {"  source: "}<span className="text-green-400">{'"dashboard"'}</span>{","}{"\n"}
-                {"  expires_in: "}<span className="text-orange-300">{"86400"}</span>{"\n"}
-                {"});"}{"\n\n"}
-                <span className="text-muted-foreground">{"// Events stream in realtime ⚡"}</span>
+                <span className="text-muted-foreground">
+                  {"// Create an invite with realtime tracking"}
+                </span>
+                {"\n"}
+                <span className="text-primary">const</span>{" invite = "}
+                <span className="text-primary">await</span>{" opix.invites."}
+                <span className="text-cyan-300">create</span>{"({"}
+                {"\n"}
+                {"  type: "}
+                <span className="text-green-400">{'"referral"'}</span>
+                {","}
+                {"\n"}
+                {"  source: "}
+                <span className="text-green-400">{'"dashboard"'}</span>
+                {","}
+                {"\n"}
+                {"  expires_in: "}
+                <span className="text-orange-300">{"86400"}</span>
+                {"\n"}
+                {"});"}
+                {"\n\n"}
+                <span className="text-muted-foreground">
+                  {"// Events stream in realtime ⚡"}
+                </span>
               </code>
             </pre>
           </div>
