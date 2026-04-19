@@ -10,6 +10,7 @@ import Auth from "./pages/Auth";
 import ApiKeys from "./pages/ApiKeys";
 import Authorizations from "./pages/Authorizations";
 import Events from "./pages/Events";
+import Connect from "./pages/Connect";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/connect" element={<Connect />} />
             <Route path="/dashboard" element={<Navigate to="/dashboard/api-keys" replace />} />
             <Route path="/dashboard/api-keys" element={<ProtectedRoute><ApiKeys /></ProtectedRoute>} />
             <Route path="/dashboard/authorizations" element={<ProtectedRoute><Authorizations /></ProtectedRoute>} />
