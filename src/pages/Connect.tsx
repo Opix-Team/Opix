@@ -125,8 +125,14 @@ const Connect = () => {
           <StepCard number={3} icon={Plug} title="Register your app">
             <p>
               Create an authorization to represent the application that will be sending events.
-              You'll get back an <code className="text-primary font-mono">id</code> — keep it; you'll
-              pass it as <code className="text-foreground font-mono">integration_id</code> when tracking events.
+              The response includes a top-level <code className="text-primary font-mono">data.id</code> —
+              that's the <strong className="text-foreground">authorization id</strong>. Copy it and pass it as{" "}
+              <code className="text-foreground font-mono">authorization_id</code> in step 4.
+            </p>
+            <p className="text-sm">
+              Heads up: do <strong className="text-foreground">not</strong> use{" "}
+              <code className="font-mono">client_id</code> or <code className="font-mono">user_id</code> from the
+              response — those are different fields. You want <code className="text-primary font-mono">data.id</code>.
             </p>
             <CodeBlock
               code={`curl -X POST ${BASE_URL}/authorizations-create \\
@@ -148,7 +154,7 @@ const Connect = () => {
   -H "Authorization: Bearer opx_your_key_here" \\
   -H "Content-Type: application/json" \\
   -d '{
-    "integration_id": "<id-from-step-3>",
+    "authorization_id": "<data.id from step 3>",
     "event_type": "user.signed_in",
     "payload": { "user_id": "u_123" },
     "status_code": 200
@@ -164,7 +170,7 @@ await fetch("${BASE_URL}/events-track", {
     "Content-Type": "application/json",
   },
   body: JSON.stringify({
-    integration_id: "<id-from-step-3>",
+    authorization_id: "<data.id from step 3>",
     event_type: "user.signed_in",
     payload: { user_id: "u_123" },
   }),
