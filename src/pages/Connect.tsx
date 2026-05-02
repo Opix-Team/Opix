@@ -154,7 +154,7 @@ const Connect = () => {
   -H "Authorization: Bearer opx_your_key_here" \\
   -H "Content-Type: application/json" \\
   -d '{
-    "integration_id": "<id-from-step-3>",
+    "authorization_id": "<data.id from step 3>",
     "event_type": "user.signed_in",
     "payload": { "user_id": "u_123" },
     "status_code": 200
@@ -170,7 +170,7 @@ await fetch("${BASE_URL}/events-track", {
     "Content-Type": "application/json",
   },
   body: JSON.stringify({
-    integration_id: "<id-from-step-3>",
+    authorization_id: "<data.id from step 3>",
     event_type: "user.signed_in",
     payload: { user_id: "u_123" },
   }),
