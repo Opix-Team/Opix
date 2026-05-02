@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Check, Copy, Key, Plug, Send, Terminal } from "lucide-react";
+import { ArrowRight, Check, Copy, FileCode, Key, Plug, Send, Terminal } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import FooterSection from "@/components/FooterSection";
 import { Button } from "@/components/ui/button";
