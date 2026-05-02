@@ -173,10 +173,61 @@ import { createClient } from "./sdk";
 export const opix = createClient(CLIENT_ID, API_KEY);`}
             />
             <p className="text-sm">
-              In production, swap the literals for env vars (e.g.{" "}
-              <code className="font-mono">import.meta.env.VITE_OPIX_API_KEY</code>) so secrets never
-              ship to the client bundle. The <code className="font-mono">./sdk</code> module is the
-              thin wrapper you build around the endpoints in this guide — or use the upcoming{" "}
+              And alongside it, create <code className="text-primary font-mono">src/integrations/opix/sdk.ts</code> —
+              the thin factory that turns your credentials into typed methods:
+            </p>
+            <CodeBlock
+              lang="typescript"
+              code={`// src/integrations/opix/sdk.ts
+const BASE_URL = "${BASE_URL}";
+
+export type OpixClient = ReturnType<typeof createClient>;
+
+export const createClient = (clientId: string, apiKey: string) => {
+  const request = async <T,>(path: string, init: RequestInit = {}): Promise<T> => {
+    const res = await fetch(\`\${BASE_URL}\${path}\`, {
+      ...init,
+      headers: {
+        "Authorization": \`Bearer \${apiKey}\`,
+        "Content-Type": "application/json",
+        ...(init.headers ?? {}),
+      },
+    });
+    const json = await res.json();
+    if (!res.ok || json.error) {
+      throw new Error(json.error?.message ?? \`Opix request failed: \${res.status}\`);
+    }
+    return json.data as T;
+  };
+
+  return {
+    clientId,
+    validate: () =>
+      request<{ valid: boolean; scopes: string[] }>("/api-keys-validate", { method: "POST" }),
+    track: (input: {
+      event_type: string;
+      payload?: Record<string, unknown>;
+      status_code?: number;
+    }) =>
+      request("/events-track", {
+        method: "POST",
+        body: JSON.stringify({ authorization_id: clientId, ...input }),
+      }),
+    listEvents: (params?: { limit?: number; since?: string }) => {
+      const qs = new URLSearchParams(
+        Object.entries(params ?? {}).filter(([, v]) => v != null) as [string, string][],
+      ).toString();
+      return request(\`/events-list\${qs ? \`?\${qs}\` : ""}\`);
+    },
+  };
+};`}
+            />
+            <p className="text-sm">
+              Now anywhere in your app:{" "}
+              <code className="font-mono">{`opix.track({ event_type: "user.signed_in" })`}</code>.
+              In production, swap the literals in <code className="font-mono">client.ts</code> for env vars
+              (e.g. <code className="font-mono">import.meta.env.VITE_OPIX_API_KEY</code>) so secrets never
+              ship to a public bundle — or use the upcoming{" "}
               <code className="font-mono">@opix/sdk</code> package once it's published.
             </p>
           </StepCard>
