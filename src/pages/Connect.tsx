@@ -73,7 +73,7 @@ const Connect = () => {
             <span className="text-xs font-mono text-muted-foreground">INTEGRATION GUIDE</span>
           </div>
           <h1 className="text-4xl md:text-6xl font-bold mb-5 tracking-tight">
-            Connect <span className="text-gradient-primary">Opix</span> in 4 steps
+            Connect <span className="text-gradient-primary">Opix</span> in 5 steps
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             From zero to your first event in under 5 minutes. No SDK install required —
