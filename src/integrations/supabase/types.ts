@@ -209,6 +209,7 @@ export type Database = {
       }
       invites: {
         Row: {
+          authorization_id: string | null
           created_at: string
           created_by: string | null
           expires_at: string | null
@@ -221,6 +222,7 @@ export type Database = {
           used_at: string | null
         }
         Insert: {
+          authorization_id?: string | null
           created_at?: string
           created_by?: string | null
           expires_at?: string | null
@@ -233,6 +235,7 @@ export type Database = {
           used_at?: string | null
         }
         Update: {
+          authorization_id?: string | null
           created_at?: string
           created_by?: string | null
           expires_at?: string | null

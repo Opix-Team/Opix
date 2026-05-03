@@ -1,6 +1,7 @@
 import { corsHeaders } from "../_shared/cors.ts";
 import { ok, fail } from "../_shared/responses.ts";
 import { validateApiKey, adminClient } from "../_shared/auth.ts";
+import { sendAuthorizationCallback } from "../_shared/callback.ts";
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
@@ -95,5 +96,14 @@ Deno.serve(async (req) => {
     .single();
 
   if (error) return fail("server_error", error.message, 500);
-  return ok(data, 201);
+
+  const callback = authorization_id
+    ? await sendAuthorizationCallback({
+        authorization_id,
+        event: event_type,
+        data: { event_type, payload: payload ?? {}, status_code: status_code ?? null, log_id: data.id },
+      })
+    : { attempted: false, ok: false };
+
+  return ok({ ...data, callback }, 201);
 });

@@ -219,6 +219,29 @@ export const createClient = (clientId: string, apiKey: string) => {
       ).toString();
       return request(\`/events-list\${qs ? \`?\${qs}\` : ""}\`);
     },
+    invites: {
+      list: (params?: { limit?: number; status?: string }) => {
+        const qs = new URLSearchParams(
+          Object.entries(params ?? {}).filter(([, v]) => v != null) as [string, string][],
+        ).toString();
+        return request(\`/invites-list\${qs ? \`?\${qs}\` : ""}\`);
+      },
+      create: (input?: { type?: string; source?: string; metadata?: Record<string, unknown>; expires_at?: string }) =>
+        request("/invites-create", {
+          method: "POST",
+          body: JSON.stringify({ authorization_id: clientId, ...(input ?? {}) }),
+        }),
+      redeem: (invite_id: string, redeemed_by?: string) =>
+        request("/invites-redeem", {
+          method: "POST",
+          body: JSON.stringify({ invite_id, redeemed_by }),
+        }),
+      revoke: (invite_id: string) =>
+        request("/invites-revoke", {
+          method: "POST",
+          body: JSON.stringify({ invite_id }),
+        }),
+    },
   };
 };`}
             />
@@ -293,6 +316,10 @@ await fetch("${BASE_URL}/events-track", {
                   ["POST", "/authorizations-revoke", "integrations"],
                   ["GET", "/events-list", "events"],
                   ["POST", "/events-track", "events"],
+                  ["GET", "/invites-list", "invites"],
+                  ["POST", "/invites-create", "invites"],
+                  ["POST", "/invites-redeem", "invites"],
+                  ["POST", "/invites-revoke", "invites"],
                 ].map(([m, p, s]) => (
                   <tr key={p} className="border-t border-border/40">
                     <td className="px-4 py-3 text-primary">{m}</td>
@@ -302,6 +329,40 @@ await fetch("${BASE_URL}/events-track", {
                 ))}
               </tbody>
             </table>
+          </div>
+
+          <div className="mt-12">
+            <h2 className="text-2xl font-semibold mb-2">Callbacks (redirect_uri)</h2>
+            <p className="text-muted-foreground mb-4">
+              When you create an authorization with a <code className="font-mono text-foreground">redirect_uri</code>,
+              Opix will <strong className="text-foreground">POST</strong> a JSON payload to that URL whenever a tracked
+              event or invite lifecycle change happens for the app. Use it to keep your backend in sync without polling.
+            </p>
+            <CodeBlock
+              lang="json"
+              code={`POST {your redirect_uri}
+Headers:
+  Content-Type: application/json
+  X-Opix-Client-ID: <your client_id>
+  X-Opix-Event: invite.redeemed
+
+Body:
+{
+  "event": "invite.redeemed",
+  "client_id": "abc123...",
+  "authorization_id": "uuid-...",
+  "timestamp": 1730000000000,
+  "data": { /* the invite or event row */ }
+}`}
+            />
+            <p className="text-sm text-muted-foreground mt-3">
+              Events emitted: <code className="font-mono text-foreground">invite.created</code>,{" "}
+              <code className="font-mono text-foreground">invite.redeemed</code>,{" "}
+              <code className="font-mono text-foreground">invite.revoked</code>, plus any{" "}
+              <code className="font-mono text-foreground">event_type</code> you pass to{" "}
+              <code className="font-mono text-foreground">/events-track</code>. Respond with 2xx; non-2xx is logged
+              but does not block the API call.
+            </p>
           </div>
         </div>
       </section>
