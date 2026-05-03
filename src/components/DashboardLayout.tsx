@@ -1,10 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { Key, ShieldCheck, Activity, LogOut } from "lucide-react";
+import { Key, ShieldCheck, Activity, LogOut, Mail } from "lucide-react";
 
 const navItems = [
   { to: "/dashboard/api-keys", label: "API Keys", icon: Key },
   { to: "/dashboard/authorizations", label: "Authorizations", icon: ShieldCheck },
+  { to: "/dashboard/invites", label: "Invites", icon: Mail },
   { to: "/dashboard/events", label: "Events", icon: Activity },
 ];
 
