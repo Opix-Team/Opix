@@ -43,6 +43,7 @@ const Authorizations = () => {
     scopes: ["read"] as string[],
   });
   const [createdClientId, setCreatedClientId] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   const fetchAuths = async () => {
     const { data } = await supabase
