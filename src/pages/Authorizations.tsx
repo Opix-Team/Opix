@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import DashboardLayout from "@/components/DashboardLayout";
-import { Plus, Trash2, Power, PowerOff, ExternalLink, Copy, ShieldCheck } from "lucide-react";
+import { Plus, Trash2, Power, PowerOff, ExternalLink, Copy, ShieldCheck, Pencil } from "lucide-react";
 import { toast } from "sonner";
 
 interface Authorization {
