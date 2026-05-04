@@ -1,0 +1,13 @@
+# CODEOWNERS
+# Default: lovable-dev[bot] owns the entire repository
+* @lovable-dev[bot]
+
+# Exceptions — owned by @ThatBobo
+LICENSE @ThatBobo
+CONTRIBUTING.md @ThatBobo
+.env @ThatBobo
+.gitignore @ThatBobo
+
+# Shared ownership for key development directories
+src/ @ThatBobo @lovable-dev[bot]
+supabase/ @ThatBobo @lovable-dev[bot]
