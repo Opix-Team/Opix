@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import DashboardLayout from "@/components/DashboardLayout";
-import { Plus, Trash2, Power, PowerOff, ExternalLink, Copy, ShieldCheck } from "lucide-react";
+import { Plus, Trash2, Power, PowerOff, ExternalLink, Copy, ShieldCheck, Pencil } from "lucide-react";
 import { toast } from "sonner";
 
 interface Authorization {
@@ -43,6 +43,7 @@ const Authorizations = () => {
     scopes: ["read"] as string[],
   });
   const [createdClientId, setCreatedClientId] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   const fetchAuths = async () => {
     const { data } = await supabase
@@ -99,6 +100,43 @@ const Authorizations = () => {
     if (error) toast.error(error.message);
     else {
       toast.success("Authorization revoked");
+      fetchAuths();
+    }
+  };
+
+  const openEdit = (auth: Authorization) => {
+    setEditingId(auth.id);
+    setForm({
+      app_name: auth.app_name,
+      app_url: auth.app_url ?? "",
+      description: auth.description ?? "",
+      redirect_uri: auth.redirect_uri ?? "",
+      scopes: auth.scopes ?? [],
+    });
+  };
+
+  const saveEdit = async () => {
+    if (!editingId) return;
+    if (!form.app_name) {
+      toast.error("App name is required");
+      return;
+    }
+    const { error } = await supabase
+      .from("authorizations")
+      .update({
+        app_name: form.app_name,
+        app_url: form.app_url || null,
+        description: form.description || null,
+        redirect_uri: form.redirect_uri || null,
+        scopes: form.scopes,
+      })
+      .eq("id", editingId);
+    if (error) {
+      toast.error(error.message);
+    } else {
+      toast.success("Authorization updated");
+      setEditingId(null);
+      setForm({ app_name: "", app_url: "", description: "", redirect_uri: "", scopes: ["read"] });
       fetchAuths();
     }
   };
@@ -253,6 +291,49 @@ const Authorizations = () => {
         </div>
       )}
 
+      {/* Edit Modal */}
+      {editingId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+          <div className="surface-glass rounded-xl p-6 w-full max-w-md mx-4 space-y-4">
+            <h2 className="text-lg font-semibold">Edit Authorization</h2>
+            <div>
+              <label className="block text-sm text-muted-foreground mb-1">App Name</label>
+              <input type="text" value={form.app_name} onChange={(e) => setForm({ ...form, app_name: e.target.value })} className="w-full px-3 py-2 rounded-lg bg-muted/50 border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50" />
+            </div>
+            <div>
+              <label className="block text-sm text-muted-foreground mb-1">App URL</label>
+              <input type="url" value={form.app_url} onChange={(e) => setForm({ ...form, app_url: e.target.value })} className="w-full px-3 py-2 rounded-lg bg-muted/50 border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50" />
+            </div>
+            <div>
+              <label className="block text-sm text-muted-foreground mb-1">Description</label>
+              <input type="text" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="w-full px-3 py-2 rounded-lg bg-muted/50 border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50" />
+            </div>
+            <div>
+              <label className="block text-sm text-muted-foreground mb-1">Redirect URI</label>
+              <input type="url" value={form.redirect_uri} onChange={(e) => setForm({ ...form, redirect_uri: e.target.value })} className="w-full px-3 py-2 rounded-lg bg-muted/50 border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50" />
+            </div>
+            <div>
+              <label className="block text-sm text-muted-foreground mb-1.5">Scopes</label>
+              <div className="flex flex-wrap gap-2">
+                {availableScopes.map(scope => (
+                  <button key={scope} type="button" onClick={() => toggleScope(scope)} className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${form.scopes.includes(scope) ? "bg-primary/10 border-primary/40 text-primary" : "bg-muted/30 border-border text-muted-foreground hover:text-foreground"}`}>
+                    {scope}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="flex gap-3 pt-2">
+              <button onClick={() => { setEditingId(null); setForm({ app_name: "", app_url: "", description: "", redirect_uri: "", scopes: ["read"] }); }} className="flex-1 py-2.5 rounded-lg border border-border text-foreground font-medium text-sm hover:bg-muted/50 transition-colors">
+                Cancel
+              </button>
+              <button onClick={saveEdit} disabled={!form.app_name} className="flex-1 py-2.5 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:glow-primary-sm transition-all disabled:opacity-50">
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Authorized Apps List */}
       {loading ? (
         <div className="flex justify-center py-12">
@@ -286,6 +367,13 @@ const Authorizations = () => {
                   </div>
                 </div>
                 <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => openEdit(auth)}
+                    className="p-1.5 rounded-md hover:bg-muted/50 text-muted-foreground hover:text-foreground transition-colors"
+                    title="Edit"
+                  >
+                    <Pencil className="w-4 h-4" />
+                  </button>
                   <button
                     onClick={() => toggleActive(auth.id, auth.is_active)}
                     className={`p-1.5 rounded-md transition-colors ${auth.is_active ? "text-primary hover:bg-primary/10" : "text-muted-foreground hover:bg-muted/50"}`}
