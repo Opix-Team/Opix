@@ -104,6 +104,43 @@ const Authorizations = () => {
     }
   };
 
+  const openEdit = (auth: Authorization) => {
+    setEditingId(auth.id);
+    setForm({
+      app_name: auth.app_name,
+      app_url: auth.app_url ?? "",
+      description: auth.description ?? "",
+      redirect_uri: auth.redirect_uri ?? "",
+      scopes: auth.scopes ?? [],
+    });
+  };
+
+  const saveEdit = async () => {
+    if (!editingId) return;
+    if (!form.app_name) {
+      toast.error("App name is required");
+      return;
+    }
+    const { error } = await supabase
+      .from("authorizations")
+      .update({
+        app_name: form.app_name,
+        app_url: form.app_url || null,
+        description: form.description || null,
+        redirect_uri: form.redirect_uri || null,
+        scopes: form.scopes,
+      })
+      .eq("id", editingId);
+    if (error) {
+      toast.error(error.message);
+    } else {
+      toast.success("Authorization updated");
+      setEditingId(null);
+      setForm({ app_name: "", app_url: "", description: "", redirect_uri: "", scopes: ["read"] });
+      fetchAuths();
+    }
+  };
+
   const copyText = (text: string) => {
     navigator.clipboard.writeText(text);
     toast.success("Copied!");
