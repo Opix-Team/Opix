@@ -325,6 +325,13 @@ const Authorizations = () => {
                 </div>
                 <div className="flex items-center gap-1">
                   <button
+                    onClick={() => openEdit(auth)}
+                    className="p-1.5 rounded-md hover:bg-muted/50 text-muted-foreground hover:text-foreground transition-colors"
+                    title="Edit"
+                  >
+                    <Pencil className="w-4 h-4" />
+                  </button>
+                  <button
                     onClick={() => toggleActive(auth.id, auth.is_active)}
                     className={`p-1.5 rounded-md transition-colors ${auth.is_active ? "text-primary hover:bg-primary/10" : "text-muted-foreground hover:bg-muted/50"}`}
                     title={auth.is_active ? "Deactivate" : "Activate"}
