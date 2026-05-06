@@ -16,8 +16,9 @@ const Auth = () => {
   const handleOAuth = async (provider: "github" | "custom:boboblox") => {
     setOauthLoading(provider);
     try {
-      const { error } = await supabase.auth.signInWithOAuth(provider, {
-        redirect_uri: window.location.origin,
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: provider as any,
+        options: { redirectTo: window.location.origin },
       });
       if (error) throw error;
     } catch (error: any) {
