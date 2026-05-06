@@ -48,7 +48,7 @@ const Authorizations = () => {
   const fetchAuths = async () => {
     const { data } = await supabase
       .from("authorizations")
-      .select("*")
+      .select("id, app_name, app_url, app_icon, description, client_id, redirect_uri, scopes, is_active, last_used_at, created_at, updated_at")
       .order("created_at", { ascending: false });
     setAuths((data as Authorization[]) ?? []);
     setLoading(false);
