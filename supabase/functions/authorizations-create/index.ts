@@ -33,7 +33,7 @@ Deno.serve(async (req) => {
       redirect_uri: redirect_uri ?? null,
       scopes: Array.isArray(scopes) ? scopes : [],
     })
-    .select()
+    .select("id, app_name, app_url, app_icon, description, client_id, redirect_uri, scopes, is_active, last_used_at, created_at, updated_at")
     .single();
 
   if (error) return fail("server_error", error.message, 500);

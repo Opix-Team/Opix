@@ -1,0 +1,10 @@
+# CODEOWNERS
+* @ThatBobo
+
+LICENSE @ThatBobo
+CONTRIBUTING.md @ThatBobo
+.env @ThatBobo
+.gitignore @ThatBobo
+
+src/ @ThatBobo
+supabase/ @ThatBobo
