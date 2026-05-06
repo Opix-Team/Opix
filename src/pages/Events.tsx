@@ -52,7 +52,7 @@ const Events = () => {
       }
 
       channel = supabase
-        .channel("events-feed")
+        .channel(`user:${user.id}:events`)
         .on(
           "postgres_changes",
           { event: "INSERT", schema: "public", table: "integration_logs" },
