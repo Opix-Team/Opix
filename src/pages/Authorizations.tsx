@@ -76,7 +76,7 @@ const Authorizations = () => {
       description: appDesc || null,
       redirect_uri: form.redirect_uri || (preset?.url ? preset.url + "/callback" : null),
       scopes: preset?.scopes || form.scopes,
-    }).select().single();
+    }).select("id, client_id").single();
 
     if (error) {
       toast.error(error.message);
