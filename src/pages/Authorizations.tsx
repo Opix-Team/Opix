@@ -48,7 +48,7 @@ const Authorizations = () => {
   const fetchAuths = async () => {
     const { data } = await supabase
       .from("authorizations")
-      .select("*")
+      .select("id, app_name, app_url, app_icon, description, client_id, redirect_uri, scopes, is_active, last_used_at, created_at, updated_at")
       .order("created_at", { ascending: false });
     setAuths((data as Authorization[]) ?? []);
     setLoading(false);
@@ -76,7 +76,7 @@ const Authorizations = () => {
       description: appDesc || null,
       redirect_uri: form.redirect_uri || (preset?.url ? preset.url + "/callback" : null),
       scopes: preset?.scopes || form.scopes,
-    }).select().single();
+    }).select("id, client_id").single();
 
     if (error) {
       toast.error(error.message);
