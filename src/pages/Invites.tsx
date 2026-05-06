@@ -52,8 +52,8 @@ const Invites = () => {
   useEffect(() => {
     load();
     const channel = supabase
-      .channel("invites-stream")
-      .on("postgres_changes", { event: "*", schema: "public", table: "invites" }, () => load())
+      .channel(`user:${user?.id ?? "anon"}:invites`)
+      .on("postgres_changes", { event: "*", schema: "public", table: "invites", filter: `created_by=eq.${user?.id ?? ""}` }, () => load())
       .subscribe();
     return () => { supabase.removeChannel(channel); };
   }, []);
