@@ -150,6 +150,7 @@ export type Database = {
           is_active: boolean
           name: string
           owner: string
+          secrets: string | null
           type: string
           updated_at: string
         }
@@ -160,6 +161,7 @@ export type Database = {
           is_active?: boolean
           name: string
           owner: string
+          secrets?: string | null
           type?: string
           updated_at?: string
         }
@@ -170,6 +172,7 @@ export type Database = {
           is_active?: boolean
           name?: string
           owner?: string
+          secrets?: string | null
           type?: string
           updated_at?: string
         }
@@ -282,6 +285,14 @@ export type Database = {
     }
     Functions: {
       generate_api_key: { Args: never; Returns: string }
+      get_integration_secret: {
+        Args: { _integration_id: string; _key: string }
+        Returns: string
+      }
+      set_integration_secret: {
+        Args: { _integration_id: string; _key: string; _value: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
