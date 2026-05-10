@@ -10,23 +10,7 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [loading, setLoading] = useState(false);
-  const [oauthLoading, setOauthLoading] = useState<string | null>(null);
   const navigate = useNavigate();
-
-  const handleOAuth = async (provider: "github" | "custom:boboblox") => {
-    setOauthLoading(provider);
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: provider as any,
-        options: { redirectTo: window.location.origin },
-      });
-      if (error) throw error;
-    } catch (error: any) {
-      toast.error(error.message || `Failed to sign in with ${provider}`);
-    } finally {
-      setOauthLoading(null);
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,7 +28,10 @@ const Auth = () => {
         if (error) throw error;
         toast.success("Check your email to confirm your account!");
       } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
         if (error) throw error;
         navigate("/dashboard");
       }
@@ -68,41 +55,23 @@ const Auth = () => {
             </div>
             <span className="font-semibold text-xl">Opix</span>
           </Link>
-          <h1 className="text-2xl font-bold">{isSignUp ? "Create your account" : "Welcome back"}</h1>
+          <h1 className="text-2xl font-bold">
+            {isSignUp ? "Create your account" : "Welcome back"}
+          </h1>
           <p className="text-muted-foreground mt-2">
-            {isSignUp ? "Start managing invites & integrations" : "Sign in to your dashboard"}
+            {isSignUp
+              ? "Start managing invites & integrations"
+              : "Sign in to your dashboard"}
           </p>
         </div>
-        <div className="surface-glass rounded-xl p-6 space-y-4">
-          <div className="grid grid-cols-2 gap-3">
-            <button
-              type="button"
-              onClick={() => handleOAuth("github")}
-              disabled={!!oauthLoading}
-              className="flex items-center justify-center gap-2 py-2.5 rounded-lg bg-muted/50 border border-border text-foreground font-medium transition-all hover:bg-muted disabled:opacity-50"
-            >
-              {oauthLoading === "github" ? (
-                "Loading..."
-              ) : (
-                <>
-                  GitHub
-                </>
-              )}
-            </button>
-          </div>
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-border" />
-            </div>
-            <div className="relative flex justify-center text-xs">
-              <span className="px-2 bg-background text-muted-foreground">or continue with email</span>
-            </div>
-          </div>
 
+        <div className="surface-glass rounded-xl p-6 space-y-4">
           <form onSubmit={handleSubmit} className="space-y-4">
             {isSignUp && (
               <div>
-                <label className="block text-sm font-medium mb-1.5 text-muted-foreground">Display Name</label>
+                <label className="block text-sm font-medium mb-1.5 text-muted-foreground">
+                  Display Name
+                </label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <input
@@ -117,7 +86,9 @@ const Auth = () => {
             )}
 
             <div>
-              <label className="block text-sm font-medium mb-1.5 text-muted-foreground">Email</label>
+              <label className="block text-sm font-medium mb-1.5 text-muted-foreground">
+                Email
+              </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <input
@@ -132,7 +103,9 @@ const Auth = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1.5 text-muted-foreground">Password</label>
+              <label className="block text-sm font-medium mb-1.5 text-muted-foreground">
+                Password
+              </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <input
