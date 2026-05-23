@@ -167,25 +167,31 @@ const Authorizations = () => {
         <button
           onClick={() => { setShowCreate(true); setCreatedClientId(null); }}
           className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-primary text-primary-foreground font-medium text-sm transition-all hover:glow-primary-sm"
+          aria-label="Open creare authorization form"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="w-4 h-4" aria-hidden="true" />
           Authorize App
         </button>
       </div>
 
       {/* Client ID Banner */}
       {createdClientId && (
-        <div className="mb-6 p-4 rounded-xl border border-primary/30 bg-primary/5">
+        <div
+          className="mb-6 p-4 rounded-xl border border-primary/30 bg-primary/5"
+          role="region"
+          aria-label="New Authorization created"
+        >
           <div className="flex items-center gap-2 mb-2">
             <ShieldCheck className="w-4 h-4 text-primary" />
             <span className="text-sm font-semibold text-primary">App Authorized — Client ID</span>
           </div>
           <div className="flex items-center gap-2">
-            <code className="flex-1 text-sm font-mono bg-muted/50 px-3 py-2 rounded-lg break-all">
+            <code className="flex-1 text-sm font-mono bg-muted/50 px-3 py-2 rounded-lg break-all" aria-label="Client Id">
               {createdClientId}
             </code>
-            <button onClick={() => copyText(createdClientId)} className="p-2 rounded-lg hover:bg-muted/50 text-foreground transition-colors">
-              <Copy className="w-4 h-4" />
+            <button onClick={() => copyText(createdClientId)} className="p-2 rounded-lg hover:bg-muted/50 text-foreground transition-colors"
+              aria-label="Copy Client Id to clipboard">
+              <Copy className="w-4 h-4" aria-hidden="true" />
             </button>
           </div>
           <p className="text-xs text-muted-foreground mt-2">Use this Client ID in the external app's Opix configuration.</p>
