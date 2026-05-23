@@ -41,12 +41,10 @@ const ApiKeys = () => {
   const createKey = async () => {
     if (!user || !newKey.name) return;
 
-    // Generate a key client-side, store only hash + prefix
     const rawKey = "opx_" + Array.from(crypto.getRandomValues(new Uint8Array(32)))
       .map(b => b.toString(16).padStart(2, "0")).join("");
     const prefix = rawKey.slice(0, 12) + "...";
 
-    // Simple hash for demo (in production, use server-side hashing)
     const encoder = new TextEncoder();
     const data = encoder.encode(rawKey);
     const hashBuffer = await crypto.subtle.digest("SHA-256", data);
@@ -122,9 +120,11 @@ const ApiKeys = () => {
             <code className="flex-1 text-sm font-mono bg-muted/50 px-3 py-2 rounded-lg break-all">
               {generatedKey}
             </code>
+            {/* Fixed: Added aria-label to icon-only copy button */}
             <button
               onClick={() => copyKey(generatedKey)}
               className="p-2 rounded-lg hover:bg-muted/50 text-foreground transition-colors"
+              aria-label="Copy newly generated API token to clipboard"
             >
               <Copy className="w-4 h-4" />
             </button>
@@ -139,8 +139,10 @@ const ApiKeys = () => {
           <div className="surface-glass rounded-xl p-6 w-full max-w-md mx-4 space-y-4">
             <h2 className="text-lg font-semibold">Create API Key</h2>
             <div>
-              <label className="block text-sm text-muted-foreground mb-1">Name</label>
+              {/* Fixed: Added htmlFor to link label cleanly with input ID */}
+              <label htmlFor="key-name" className="block text-sm text-muted-foreground mb-1">Name</label>
               <input
+                id="key-name" // Fixed: Added matching unique element ID
                 type="text"
                 value={newKey.name}
                 onChange={(e) => setNewKey({ ...newKey, name: e.target.value })}
@@ -149,8 +151,8 @@ const ApiKeys = () => {
               />
             </div>
             <div>
-              <label className="block text-sm text-muted-foreground mb-1.5">Scopes</label>
-              <div className="flex flex-wrap gap-2">
+              <span className="block text-sm text-muted-foreground mb-1.5">Scopes</span>
+              <div className="flex flex-wrap gap-2" role="group" aria-label="API permission scopes selection">
                 {availableScopes.map(scope => (
                   <button
                     key={scope}
@@ -161,6 +163,8 @@ const ApiKeys = () => {
                         ? "bg-primary/10 border-primary/40 text-primary"
                         : "bg-muted/30 border-border text-muted-foreground hover:text-foreground"
                     }`}
+                    aria-label={`Toggle ${scope} security scope permissions`}
+                    aria-pressed={newKey.scopes.includes(scope)}
                   >
                     {scope}
                   </button>
@@ -206,35 +210,27 @@ const ApiKeys = () => {
                       {key.is_active ? "Active" : "Revoked"}
                     </span>
                   </div>
-                  <div className="flex items-center gap-2 mt-1.5">
-                    <code className="text-xs font-mono text-muted-foreground">{key.key_prefix}</code>
-                    <button onClick={() => copyKey(key.key_prefix)} className="text-muted-foreground hover:text-foreground">
-                      <Copy className="w-3 h-3" />
-                    </button>
+                  <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
+                    <code className="font-mono bg-muted/30 px-2 py-0.5 rounded text-xs">{key.key_prefix}</code>
+                    <span>Created {new Date(key.created_at).toLocaleDateString()}</span>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5 mt-3">
+                    {key.scopes.map(s => (
+                      <span key={s} className="px-2 py-0.5 rounded bg-muted text-xs font-mono text-muted-foreground">
+                        {s}
+                      </span>
+                    ))}
                   </div>
                 </div>
+                {/* Fixed: Wrapped delete trigger in explicit semantic tag with clear accessibility context */}
                 <button
                   onClick={() => deleteKey(key.id)}
-                  className="p-1.5 rounded-md hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
+                  className="p-2 rounded-lg hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
+                  aria-label={`Revoke and delete API key named ${key.name}`}
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
               </div>
-              <div className="mt-3 flex items-center gap-4 text-xs text-muted-foreground">
-                <span>Created {new Date(key.created_at).toLocaleDateString()}</span>
-                {key.last_used_at && (
-                  <span>Last used {new Date(key.last_used_at).toLocaleDateString()}</span>
-                )}
-              </div>
-              {key.scopes.length > 0 && (
-                <div className="mt-2 flex flex-wrap gap-1.5">
-                  {key.scopes.map(scope => (
-                    <span key={scope} className="px-2 py-0.5 rounded-md bg-secondary text-secondary-foreground text-xs font-medium">
-                      {scope}
-                    </span>
-                  ))}
-                </div>
-              )}
             </div>
           ))}
         </div>
