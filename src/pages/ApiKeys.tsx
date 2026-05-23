@@ -100,11 +100,14 @@ const ApiKeys = () => {
           <h1 className="text-2xl font-bold">API Keys</h1>
           <p className="text-muted-foreground mt-1">Manage keys for programmatic access to Opix</p>
         </div>
+
+        {/* Accessible Create Key button */}
         <button
           onClick={() => { setShowCreate(true); setGeneratedKey(null); }}
           className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-primary text-primary-foreground font-medium text-sm transition-all hover:glow-primary-sm"
+          aria-label="Create a new API key"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="w-4 h-4" aria-hidden="true" />
           Create Key
         </button>
       </div>
@@ -113,36 +116,47 @@ const ApiKeys = () => {
       {generatedKey && (
         <div className="mb-6 p-4 rounded-xl border border-primary/30 bg-primary/5">
           <div className="flex items-center gap-2 mb-2">
-            <Shield className="w-4 h-4 text-primary" />
+            <Shield className="w-4 h-4 text-primary" aria-hidden="true" />
             <span className="text-sm font-semibold text-primary">New API Key — copy it now!</span>
           </div>
+
           <div className="flex items-center gap-2">
             <code className="flex-1 text-sm font-mono bg-muted/50 px-3 py-2 rounded-lg break-all">
               {generatedKey}
             </code>
-            {/* Fixed: Added aria-label to icon-only copy button */}
+
             <button
               onClick={() => copyKey(generatedKey)}
               className="p-2 rounded-lg hover:bg-muted/50 text-foreground transition-colors"
-              aria-label="Copy newly generated API token to clipboard"
+              aria-label="Copy newly generated API key to clipboard"
             >
-              <Copy className="w-4 h-4" />
+              <Copy className="w-4 h-4" aria-hidden="true" />
             </button>
           </div>
-          <p className="text-xs text-muted-foreground mt-2">This key won't be shown again. Store it securely.</p>
+
+          <p className="text-xs text-muted-foreground mt-2">
+            This key won't be shown again. Store it securely.
+          </p>
         </div>
       )}
 
       {/* Create Modal */}
       {showCreate && !generatedKey && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Create API Key Modal"
+        >
           <div className="surface-glass rounded-xl p-6 w-full max-w-md mx-4 space-y-4">
             <h2 className="text-lg font-semibold">Create API Key</h2>
+
             <div>
-              {/* Fixed: Added htmlFor to link label cleanly with input ID */}
-              <label htmlFor="key-name" className="block text-sm text-muted-foreground mb-1">Name</label>
+              <label htmlFor="key-name" className="block text-sm text-muted-foreground mb-1">
+                Name
+              </label>
               <input
-                id="key-name" // Fixed: Added matching unique element ID
+                id="key-name"
                 type="text"
                 value={newKey.name}
                 onChange={(e) => setNewKey({ ...newKey, name: e.target.value })}
@@ -150,9 +164,11 @@ const ApiKeys = () => {
                 placeholder="e.g. Google Classroom Integration"
               />
             </div>
+
             <div>
               <span className="block text-sm text-muted-foreground mb-1.5">Scopes</span>
-              <div className="flex flex-wrap gap-2" role="group" aria-label="API permission scopes selection">
+
+              <div className="flex flex-wrap gap-2" role="group" aria-label="API permission scopes">
                 {availableScopes.map(scope => (
                   <button
                     key={scope}
@@ -163,7 +179,7 @@ const ApiKeys = () => {
                         ? "bg-primary/10 border-primary/40 text-primary"
                         : "bg-muted/30 border-border text-muted-foreground hover:text-foreground"
                     }`}
-                    aria-label={`Toggle ${scope} security scope permissions`}
+                    aria-label={`Toggle ${scope} scope`}
                     aria-pressed={newKey.scopes.includes(scope)}
                   >
                     {scope}
@@ -171,11 +187,22 @@ const ApiKeys = () => {
                 ))}
               </div>
             </div>
+
             <div className="flex gap-3 pt-2">
-              <button onClick={() => setShowCreate(false)} className="flex-1 py-2.5 rounded-lg border border-border text-foreground font-medium text-sm hover:bg-muted/50 transition-colors">
+              <button
+                onClick={() => setShowCreate(false)}
+                className="flex-1 py-2.5 rounded-lg border border-border text-foreground font-medium text-sm hover:bg-muted/50 transition-colors"
+                aria-label="Cancel API key creation"
+              >
                 Cancel
               </button>
-              <button onClick={createKey} disabled={!newKey.name} className="flex-1 py-2.5 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:glow-primary-sm transition-all disabled:opacity-50">
+
+              <button
+                onClick={createKey}
+                disabled={!newKey.name}
+                className="flex-1 py-2.5 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:glow-primary-sm transition-all disabled:opacity-50"
+                aria-label="Generate new API key"
+              >
                 Generate Key
               </button>
             </div>
@@ -186,11 +213,15 @@ const ApiKeys = () => {
       {/* Keys List */}
       {loading ? (
         <div className="flex justify-center py-12">
-          <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+          <div
+            className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"
+            role="status"
+            aria-label="Loading API keys"
+          />
         </div>
       ) : keys.length === 0 ? (
         <div className="text-center py-16 surface-glass rounded-xl">
-          <Key className="w-8 h-8 text-muted-foreground mx-auto mb-3" />
+          <Key className="w-8 h-8 text-muted-foreground mx-auto mb-3" aria-hidden="true" />
           <p className="text-muted-foreground">No API keys yet. Create one to get started.</p>
         </div>
       ) : (
@@ -200,35 +231,45 @@ const ApiKeys = () => {
               <div className="flex items-start justify-between">
                 <div>
                   <div className="flex items-center gap-2">
-                    <Key className="w-4 h-4 text-primary" />
+                    <Key className="w-4 h-4 text-primary" aria-hidden="true" />
                     <h3 className="font-semibold">{key.name}</h3>
-                    <span className={`px-2 py-0.5 rounded-md text-xs font-medium ${
-                      key.is_active
-                        ? "bg-primary/10 text-primary"
-                        : "bg-destructive/10 text-destructive"
-                    }`}>
+
+                    <span
+                      className={`px-2 py-0.5 rounded-md text-xs font-medium ${
+                        key.is_active
+                          ? "bg-primary/10 text-primary"
+                          : "bg-destructive/10 text-destructive"
+                      }`}
+                    >
                       {key.is_active ? "Active" : "Revoked"}
                     </span>
                   </div>
+
                   <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
-                    <code className="font-mono bg-muted/30 px-2 py-0.5 rounded text-xs">{key.key_prefix}</code>
+                    <code className="font-mono bg-muted/30 px-2 py-0.5 rounded text-xs">
+                      {key.key_prefix}
+                    </code>
                     <span>Created {new Date(key.created_at).toLocaleDateString()}</span>
                   </div>
+
                   <div className="flex flex-wrap gap-1.5 mt-3">
                     {key.scopes.map(s => (
-                      <span key={s} className="px-2 py-0.5 rounded bg-muted text-xs font-mono text-muted-foreground">
+                      <span
+                        key={s}
+                        className="px-2 py-0.5 rounded bg-muted text-xs font-mono text-muted-foreground"
+                      >
                         {s}
                       </span>
                     ))}
                   </div>
                 </div>
-                {/* Fixed: Wrapped delete trigger in explicit semantic tag with clear accessibility context */}
+
                 <button
                   onClick={() => deleteKey(key.id)}
                   className="p-2 rounded-lg hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
-                  aria-label={`Revoke and delete API key named ${key.name}`}
+                  aria-label={`Revoke API key named ${key.name}`}
                 >
-                  <Trash2 className="w-4 h-4" />
+                  <Trash2 className="w-4 h-4" aria-hidden="true" />
                 </button>
               </div>
             </div>
