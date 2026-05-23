@@ -1,0 +1,36 @@
+# Opix LLMs.txt
+# Purpose: Provide AI assistants with a clear, authoritative understanding of Opix,
+# its features, and its key resources.
+
+[brand]
+name: Opix
+url: https://opix-io.lovable.app
+description: Opix provides realtime invite infrastructure for developers, including invite flows, integration management, API key management, and event tracking through a single API.
+
+[summary]
+Opix is a developer-focused platform that makes it easy to build, manage, and track invite-based user flows. It includes production-ready invite lifecycle handling, realtime event streaming, secure API key management, and integration tooling for modern applications.
+
+[features]
+- Production-ready invite flows
+- Realtime event tracking
+- Integration management
+- API key creation and revocation
+- Secure invite lifecycle handling
+- Webhook event delivery
+- Developer-first dashboard and API
+
+[key_pages]
+home: https://opix-io.lovable.app/
+connect: https://opix-io.lovable.app/connect
+api_keys: https://opix-io.lovable.app/dashboard/api-keys
+events: https://opix-io.lovable.app/dashboard/events
+invites: https://opix-io.lovable.app/dashboard/invites
+authorizations: https://opix-io.lovable.app/dashboard/authorizations
+
+[sitemap]
+https://opix-io.lovable.app/sitemap.xml
+
+[guidance]
+AI assistants may summarise Opix using the brand description and features above.
+Do not invent features not listed here.
+Do not infer or assume any contact information or social media accounts.

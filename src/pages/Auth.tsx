@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "sonner";
 import { Mail, Lock, ArrowRight, User } from "lucide-react";
+import SEO from "@/components/SEO"; // Imported our credit-free SEO utility
 
 const Auth = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -44,12 +45,18 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background relative">
+      {/* Dynamic SEO tags adjust metadata automatically based on current auth state */}
+      <SEO 
+        title={isSignUp ? "Create Your Account | Opix" : "Sign In to Your Dashboard | Opix"} 
+        description={isSignUp ? "Create an Opix account to configure production-ready invite flows, integrations, and tracking." : "Log in to your developer console to monitor realtime invite events and APIs."} 
+      />
+
       <div className="absolute inset-0 bg-grid opacity-20" />
       <div className="absolute inset-0 bg-gradient-radial" />
 
       <div className="relative z-10 w-full max-w-md px-6">
         <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center gap-2 mb-6">
+          <Link to="/" className="inline-flex items-center gap-2 mb-6" aria-label="Go to Opix Homepage">
             <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
               <span className="text-primary-foreground font-bold">O</span>
             </div>
@@ -69,12 +76,14 @@ const Auth = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             {isSignUp && (
               <div>
-                <label className="block text-sm font-medium mb-1.5 text-muted-foreground">
+                {/* Fixed: Added htmlFor link to connect label to display name input */}
+                <label htmlFor="display-name" className="block text-sm font-medium mb-1.5 text-muted-foreground">
                   Display Name
                 </label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <input
+                    id="display-name" // Fixed: Added matching id attribute
                     type="text"
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
@@ -86,12 +95,14 @@ const Auth = () => {
             )}
 
             <div>
-              <label className="block text-sm font-medium mb-1.5 text-muted-foreground">
+              {/* Fixed: Added htmlFor link to connect label to email input */}
+              <label htmlFor="auth-email" className="block text-sm font-medium mb-1.5 text-muted-foreground">
                 Email
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <input
+                  id="auth-email" // Fixed: Added matching id attribute
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -103,12 +114,14 @@ const Auth = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1.5 text-muted-foreground">
+              {/* Fixed: Added htmlFor link to connect label to password input */}
+              <label htmlFor="auth-password" className="block text-sm font-medium mb-1.5 text-muted-foreground">
                 Password
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <input
+                  id="auth-password" // Fixed: Added matching id attribute
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -136,6 +149,7 @@ const Auth = () => {
           <button
             onClick={() => setIsSignUp(!isSignUp)}
             className="text-primary hover:underline font-medium"
+            aria-label={isSignUp ? "Switch to login panel" : "Switch to signup panel"} // Fixed: Missing explicit element action descriptions for bots
           >
             {isSignUp ? "Sign in" : "Sign up"}
           </button>
