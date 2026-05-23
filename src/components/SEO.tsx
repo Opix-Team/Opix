@@ -10,7 +10,7 @@ export default function SEO({ title, description }: SEOProps) {
   const location = useLocation();
   
   // Define your base production domain
-  const baseDomain = "https://lovable.app";
+  const baseDomain = "https://opix-io.lovable.app";
   const currentUrl = `${baseDomain}${location.pathname}`;
 
   useEffect(() => {
