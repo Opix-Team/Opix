@@ -9,27 +9,59 @@
     <!-- Canonical placeholder (updated dynamically by SEO.tsx) -->
     <link rel="canonical" href="" />
 
-    <!-- Neutral SEO Meta Tags (overridden by SEO.tsx) -->
+    <!-- Neutral Static SEO (dynamic values injected by SEO.tsx) -->
     <title>Opix</title>
     <meta name="title" content="Opix" />
     <meta name="description" content="Opix application" />
     <meta name="keywords" content="opix, developer tools, api" />
     <meta name="author" content="Opix" />
 
-    <!-- Open Graph placeholders -->
+    <!-- Open Graph placeholders (overridden dynamically) -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="" />
     <meta property="og:title" content="Opix" />
     <meta property="og:description" content="Opix application" />
     <meta property="og:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/0a24873b-8179-4c59-b654-3b8769b97121" />
 
-    <!-- Twitter placeholders -->
+    <!-- Twitter placeholders (overridden dynamically) -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="" />
     <meta name="twitter:title" content="Opix" />
     <meta name="twitter:description" content="Opix application" />
     <meta name="twitter:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/0a24873b-8179-4c59-b654-3b8769b97121" />
     <meta name="twitter:site" content="@Opix_io" />
+
+    <!-- JSON-LD Structured Data for Opix -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Opix",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "All",
+      "url": "https://opix-io.lovable.app",
+      "description": "Opix provides realtime invite infrastructure for developers, including invite flows, integration management, and event tracking through a single API.",
+      "creator": {
+        "@type": "Organization",
+        "name": "Opix",
+        "url": "https://opix-io.lovable.app"
+      },
+      "featureList": [
+        "Production-ready invite flows",
+        "Realtime event tracking",
+        "Integration management",
+        "API key management",
+        "Secure invite lifecycle handling",
+        "Webhook event delivery"
+      ],
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      }
+    }
+    </script>
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
