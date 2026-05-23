@@ -1,26 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://sitemaps.org">
-  <!-- Public Landing Page / Homepage -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
   <url>
-    <loc>https://lovable.app</loc>
-    <lastmod>2026-05-23</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://opix-io.lovable.app/</loc>
     <priority>1.0</priority>
   </url>
-  
-  <!-- Public Connect/Integration Page -->
+
   <url>
-    <loc>https://lovable.appconnect</loc>
-    <lastmod>2026-05-23</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://opix-io.lovable.app/auth</loc>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://opix-io.lovable.app/connect</loc>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://opix-io.lovable.app/dashboard/api-keys</loc>
     <priority>0.8</priority>
   </url>
 
-  <!-- Public Authentication Portal -->
   <url>
-    <loc>https://lovable.appauth</loc>
-    <lastmod>2026-05-23</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
+    <loc>https://opix-io.lovable.app/dashboard/authorizations</loc>
+    <priority>0.7</priority>
   </url>
+
+  <url>
+    <loc>https://opix-io.lovable.app/dashboard/events</loc>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://opix-io.lovable.app/dashboard/invites</loc>
+    <priority>0.8</priority>
+  </url>
+
 </urlset>
