@@ -1,9 +1,19 @@
-# Opix - Invite infrastructure backend
-Welcome the Opix, first things first, let's get started with a podcast:
-<br>[![Listen to the Copilot Podcast](https://img.shields.io/badge/podcast-copilot
-)](https://copilot.microsoft.com/shares/podcasts/B8f18qQaSrR2mMr3CFw5q)
+# Opix
 
-> **[🎧 Click here to play the podcast on Microsoft Copilot](https://copilot.microsoft.com/shares/podcasts/B8f18qQaSrR2mMr3CFw5q)**
+Opix is a secure authorization system that lets external apps connect safely using OAuth-style flows.
 
+## 🚀 Features
+- Easy client ID setup
+- Secure token management
+- Built with React, Supabase, and Tailwind
+- Accessibility-first design
 
-Ok, I guess now you want to learn more, well, okay, I don't know anymore, but we will soon add a Docs page.
+## 🌐 Live App
+[Visit Opix](https://opix-io.lovable.app) — try it live and see how authorization works.
+
+## 🤝 Contributing
+Pull requests are welcome! For major changes, please open an issue first to discuss.
+
+---
+
+Made with ❤️ by [ThatBobo](https://github.com/ThatBobo)

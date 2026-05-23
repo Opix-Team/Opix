@@ -78,7 +78,14 @@ const Events = () => {
       <div className="mb-8">
         <div className="flex items-center gap-3">
           <h1 className="text-2xl font-bold">Event Stream</h1>
-          <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+
+          {/* Accessible LIVE indicator */}
+          <div
+            className="w-2 h-2 rounded-full bg-primary animate-pulse"
+            role="img"
+            aria-label="Live event stream indicator"
+          />
+
           <span className="text-xs text-primary font-medium">LIVE</span>
         </div>
         <p className="text-muted-foreground mt-1">Realtime feed of tracked events</p>
@@ -86,11 +93,20 @@ const Events = () => {
 
       {loading ? (
         <div className="flex justify-center py-12">
-          <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+          {/* Accessible loading spinner */}
+          <div
+            className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"
+            role="status"
+            aria-label="Loading events"
+          />
         </div>
       ) : events.length === 0 ? (
         <div className="text-center py-16 surface-glass rounded-xl">
-          <Activity className="w-8 h-8 text-muted-foreground mx-auto mb-3" />
+          {/* Decorative icon hidden from screen readers */}
+          <Activity
+            className="w-8 h-8 text-muted-foreground mx-auto mb-3"
+            aria-hidden="true"
+          />
           <p className="text-muted-foreground">
             {integrationIds.length === 0
               ? "No integrations yet. Track an event from the Connect guide to get started."
@@ -104,10 +120,20 @@ const Events = () => {
               key={event.id}
               className="flex items-start gap-4 p-4 rounded-lg hover:bg-muted/20 transition-colors animate-fade-up"
               style={{ animationDelay: `${i * 30}ms` }}
+
+              /* Accessible name for each event row */
+              role="group"
+              aria-label={`Event ${event.event_type} for integration ${event.integration_id.slice(0, 8)}`}
             >
               <div className="mt-1.5">
-                <div className={`w-2.5 h-2.5 rounded-full ${eventColors[event.event_type] || eventColors.updated}`} />
+                <div
+                  className={`w-2.5 h-2.5 rounded-full ${
+                    eventColors[event.event_type] || eventColors.updated
+                  }`}
+                  aria-hidden="true"
+                />
               </div>
+
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-3">
                   <span className="text-sm font-semibold">{event.event_type}</span>
@@ -115,17 +141,22 @@ const Events = () => {
                     {event.integration_id.slice(0, 8)}…
                   </span>
                   {event.status_code != null && (
-                    <span className="text-xs text-muted-foreground">{event.status_code}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {event.status_code}
+                    </span>
                   )}
                 </div>
+
                 <p className="text-xs text-muted-foreground mt-1">
                   {new Date(event.created_at).toLocaleString()}
                 </p>
-                {event.payload && Object.keys(event.payload as object).length > 0 && (
-                  <pre className="mt-2 text-xs text-muted-foreground bg-muted/30 rounded-md p-2 overflow-x-auto font-mono">
-                    {JSON.stringify(event.payload, null, 2)}
-                  </pre>
-                )}
+
+                {event.payload &&
+                  Object.keys(event.payload as object).length > 0 && (
+                    <pre className="mt-2 text-xs text-muted-foreground bg-muted/30 rounded-md p-2 overflow-x-auto font-mono">
+                      {JSON.stringify(event.payload, null, 2)}
+                    </pre>
+                  )}
               </div>
             </div>
           ))}

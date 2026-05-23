@@ -38,7 +38,6 @@ const Dashboard = () => {
     fetchStats();
     fetchRecentEvents();
 
-    // Realtime subscription for events
     const channel = supabase
       .channel("dashboard-events")
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "invite_events" }, (payload) => {
@@ -67,12 +66,19 @@ const Dashboard = () => {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8" role="region" aria-label="Workspace statistics">
         {statCards.map((stat) => (
-          <div key={stat.label} className="surface-glass rounded-xl p-5">
+          <div
+            key={stat.label}
+            className="surface-glass rounded-xl p-5"
+            role="group"
+            aria-label={`${stat.label}: ${stat.value}`}
+          >
             <div className="flex items-center justify-between mb-3">
               <span className="text-sm text-muted-foreground">{stat.label}</span>
-              <stat.icon className={`w-4 h-4 ${stat.color}`} />
+
+              {/* Decorative icon */}
+              <stat.icon className={`w-4 h-4 ${stat.color}`} aria-hidden="true" />
             </div>
             <p className="text-3xl font-bold">{stat.value}</p>
           </div>
@@ -80,19 +86,32 @@ const Dashboard = () => {
       </div>
 
       {/* Recent Events */}
-      <div className="surface-glass rounded-xl p-5">
+      <div className="surface-glass rounded-xl p-5" role="region" aria-label="Recent events">
         <div className="flex items-center gap-2 mb-4">
-          <TrendingUp className="w-4 h-4 text-primary" />
-          <h2 className="font-semibold">Recent Events</h2>
+          <TrendingUp className="w-4 h-4 text-primary" aria-hidden="true" />
+          <h2 className="font-semibold" id="recent-events-title">Recent Events</h2>
         </div>
+
         {recentEvents.length === 0 ? (
-          <p className="text-sm text-muted-foreground py-8 text-center">No events yet. Create an invite to get started.</p>
+          <p className="text-sm text-muted-foreground py-8 text-center">
+            No events yet. Create an invite to get started.
+          </p>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-3" role="list" aria-labelledby="recent-events-title">
             {recentEvents.map((event: any) => (
-              <div key={event.id} className="flex items-center justify-between py-2 border-b border-border/30 last:border-0">
+              <div
+                key={event.id}
+                className="flex items-center justify-between py-2 border-b border-border/30 last:border-0"
+                role="listitem"
+                aria-label={`Event ${event.event_type} at ${new Date(event.created_at).toLocaleString()}`}
+              >
                 <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-primary" />
+                  {/* Status dot */}
+                  <div
+                    className="w-2 h-2 rounded-full bg-primary"
+                    aria-hidden="true"
+                  />
+
                   <div>
                     <span className="text-sm font-medium">{event.event_type}</span>
                     <p className="text-xs text-muted-foreground">
@@ -100,6 +119,7 @@ const Dashboard = () => {
                     </p>
                   </div>
                 </div>
+
                 <span className="text-xs text-muted-foreground font-mono">
                   {event.invite_id?.slice(0, 8)}...
                 </span>
