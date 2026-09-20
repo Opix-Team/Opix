@@ -1,69 +1,35 @@
+# Passkey sign-in for Opix
 
-## Goal
-Make `/api` a real, callable, SDK-friendly surface. Today the `/api/*.ts` files don't run — Lovable hosts a static React app, and they import the browser Supabase client. External SDKs (sdk.ts/sdk.js) need real HTTP endpoints. The right home is **Supabase Edge Functions**, which Lovable Cloud auto-deploys.
+Add passkeys (fingerprint, face, or device screen lock) as an extra security step after email and password.
 
-Also fix the current build error (`opix-callbacks.ts` imports missing `@/types`).
+## How it will work
 
-## Proposed architecture
+1. You sign in with email and password as usual.
+2. If your account has a passkey saved, Opix asks you to confirm with your device before the dashboard opens.
+3. You can add a passkey right after sign-up, or later from a new Security page in the dashboard.
+4. The Security page lists your saved devices with the date added, and lets you remove any of them.
 
-```text
-supabase/functions/
-  _shared/
-    cors.ts          CORS headers
-    auth.ts          validateApiKey(req, requiredScope) — single source of truth
-    responses.ts     ok(data) / fail(code, message, status)
-  api-keys-validate/index.ts
-  authorizations-list/index.ts
-  authorizations-create/index.ts
-  authorizations-revoke/index.ts
-  events-list/index.ts
-  events-track/index.ts
-  invites-list/index.ts        (optional, see Q3)
-  invites-create/index.ts      (optional, see Q3)
-```
+If you have no passkey saved, nothing changes — you go straight in.
 
-Each function:
-- Handles `OPTIONS` preflight
-- Validates `Authorization: Bearer opx_...` via shared helper (SHA-256 hash → `api_keys` lookup → scope check → updates `last_used_at`)
-- Uses service-role client, scoped to the API key's `user_id`
-- Returns a uniform shape:
-  - success → `{ data: ... }`
-  - error → `{ error: { code, message } }` with proper HTTP status
+## Screens
 
-This gives the SDK one consistent error contract.
+- Sign-up: after the account is created, an optional "Add a passkey" step.
+- Sign-in: a confirm-with-your-device step that appears only when a passkey exists.
+- Dashboard > Security: list of devices, "Add this device" button, remove button per device.
 
-## SDK-facing base URL
+## Recovery
 
-External SDKs will call:
-```text
-https://coatunyealgfrmpszpsu.supabase.co/functions/v1/<endpoint>
-```
-Lovable's static host can't serve `/api/*` directly. If you want pretty `https://api.opix.io/...` URLs later, point a custom domain at the functions gateway — flagged as a follow-up.
+Losing every device would lock you out of the extra step, so the Security page will also generate one-time backup codes you can save. Entering a backup code passes the step instead of the device.
 
-## Cleanup
-- Delete the 8 dead files in `/api/**` and replace with `api/README.md` documenting the real endpoints, auth header, scopes, and error codes — so SDK authors land in the right place.
-- Create `src/types/index.ts` exporting `Authorization`, `ApiKey`, `Invite`, `InviteEvent` from the generated Supabase types.
-- Fix `src/lib/opix-callbacks.ts` to import from `@/types`.
+## Technical notes
 
-## Endpoint contract (v1)
-
-| Method | Endpoint | Scope | Body / Query |
-|---|---|---|---|
-| POST | `api-keys-validate` | — | (key in header) |
-| GET  | `authorizations-list` | `integrations` | — |
-| POST | `authorizations-create` | `integrations` | `{ app_name, app_url, redirect_uri, scopes[] }` |
-| POST | `authorizations-revoke` | `integrations` | `{ id }` |
-| GET  | `events-list` | `events` | `?limit&since` |
-| POST | `events-track` | `events` | `{ event_type, event_data }` |
-| GET  | `invites-list` | `invites` | `?status&limit` |
-| POST | `invites-create` | `invites` | `{ type, source?, expires_at? }` |
-
-## Out of scope for this step
-- Publishing an actual `@opix/sdk` npm package (next step, after API is solid).
-- Rate limiting, webhooks signing — follow-ups.
-- New tables.
-
-## Three quick decisions I need from you
-1. **Pretty URLs** — ship now on `*.supabase.co/functions/v1/*`, or also scaffold for a future `api.opix.io` custom domain?
-2. **Old `/api` folder** — delete and replace with a README (recommended), or keep with a DEPRECATED banner?
-3. **Invites endpoints** — include in the public API, or drop since the UI was removed?
+- New table `public.passkeys`: `id`, `user_id`, `credential_id` (unique), `public_key`, `counter`, `transports`, `device_label`, `created_at`, `last_used_at`. RLS: owner-only select/delete; inserts and updates go through edge functions. GRANT select/delete to `authenticated`, ALL to `service_role`.
+- New table `public.passkey_backup_codes`: `user_id`, `code_hash`, `used_at`. Owner-only select; no client insert.
+- New table `public.passkey_challenges`: short-lived `user_id`, `challenge`, `type`, `expires_at`; service-role only.
+- Four edge functions using `@simplewebauthn/server` from esm.sh, all requiring a valid Supabase user JWT (not an API key):
+  - `passkey-register-options`, `passkey-register-verify`
+  - `passkey-auth-options`, `passkey-auth-verify`
+  RP ID derived from the request origin so preview and published domains both work.
+- Client helper `src/lib/passkeys.ts` wrapping `navigator.credentials` plus base64url encoding, with a capability check so unsupported browsers fall back to backup codes.
+- Gate: `useAuth` gains `passkeyVerified`. After `signInWithPassword`, the app calls `passkey-auth-options`; if the account has passkeys, `ProtectedRoute` renders the challenge screen instead of the page until `passkey-auth-verify` succeeds. The verified flag is stored per session in `sessionStorage`. This is an in-app gate — the Supabase session itself exists from password sign-in onward, so it raises the bar in the UI rather than replacing server-side auth.
+- Routes: `/dashboard/security` page, sidebar entry in `DashboardLayout`.
