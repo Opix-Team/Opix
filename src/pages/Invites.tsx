@@ -231,26 +231,6 @@ const Invites = () => {
                     {inv.status}
                   </td>
                   <td className="px-4 py-3 text-muted-foreground">{inv.source || "—"}</td>
-            <thead className="bg-card/50 text-muted-foreground text-xs uppercase tracking-wider">
-              <tr>
-                <th className="text-left px-4 py-3 font-medium">ID</th>
-                <th className="text-left px-4 py-3 font-medium">Type</th>
-                <th className="text-left px-4 py-3 font-medium">Status</th>
-                <th className="text-left px-4 py-3 font-medium">Source</th>
-                <th className="text-right px-4 py-3 font-medium">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border/40">
-              {invites.map((inv) => (
-                <tr key={inv.id} className="hover:bg-muted/20 transition-colors">
-                  <td className="px-4 py-3 font-mono text-xs max-w-[120px] truncate">
-                    {inv.id}
-                  </td>
-                  <td className="px-4 py-3 font-medium">{inv.type}</td>
-                  <td className={`px-4 py-3 font-medium ${statusColor(inv.status)}`}>
-                    {inv.status}
-                  </td>
-                  <td className="px-4 py-3 text-muted-foreground">{inv.source || "—"}</td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex items-center justify-end gap-1">
                       {/* Fixed: Added aria-label to copy icon-button */}
