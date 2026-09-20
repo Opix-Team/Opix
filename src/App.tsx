@@ -12,6 +12,8 @@ import Authorizations from "./pages/Authorizations";
 import Events from "./pages/Events";
 import Invites from "./pages/Invites";
 import Connect from "./pages/Connect";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
