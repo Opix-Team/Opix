@@ -12,6 +12,8 @@ import Authorizations from "./pages/Authorizations";
 import Events from "./pages/Events";
 import Invites from "./pages/Invites";
 import Connect from "./pages/Connect";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,6 +29,8 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/connect" element={<Connect />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/dashboard" element={<Navigate to="/dashboard/api-keys" replace />} />
             <Route path="/dashboard/api-keys" element={<ProtectedRoute><ApiKeys /></ProtectedRoute>} />
             <Route path="/dashboard/authorizations" element={<ProtectedRoute><Authorizations /></ProtectedRoute>} />

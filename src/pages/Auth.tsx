@@ -154,6 +154,13 @@ const Auth = () => {
             {isSignUp ? "Sign in" : "Sign up"}
           </button>
         </p>
+        {!isSignUp && (
+          <p className="text-center mt-3 text-sm">
+            <Link to="/forgot-password" className="text-muted-foreground hover:text-foreground hover:underline">
+              Forgot your password?
+            </Link>
+          </p>
+        )}
       </div>
     </div>
   );
